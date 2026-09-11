@@ -1,0 +1,11 @@
+Cost item,Unit,Monthly units,Cost per unit CAD,Monthly fixed CAD,Quote or evidence,Notes
+Hosting,month,,,,,
+Database and backups,month,,,,,
+Telephone numbers,number,,,,,
+Telephone usage,minute,,,,,
+Speech and model usage,minute,,,,,
+Payment processing,transaction,,,,,
+Hardware amortization,device,,,,,
+Installation labour,hour,,,,,
+Support labour,hour,,,,,
+Monitoring and incident coverage,month,,,,,

@@ -1,0 +1,14 @@
+node_modules
+.git
+.env*
+data
+server-dist
+dist
+kits
+.wrangler
+.sites-runtime
+outputs
+work
+*.sqlite*
+*.jawabak
+__pycache__
