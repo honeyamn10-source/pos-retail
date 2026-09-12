@@ -6,6 +6,11 @@ restaurant or retail entry point. No ChatGPT account is needed for this edition.
 
 ## Fast start from a prebuilt Server Kit
 
+For the guided local start, use **docs/EASY_SETUP.md** and the included
+START_JAWA launcher for your computer. It checks prerequisites, displays the
+one-time owner token and opens your browser. New retail kits launched this way
+use port 8788; restaurant kits use 8787. Manual commands below retain port 8787.
+
 Install Node.js 24 LTS. Extract the kit and open a terminal in its folder:
 
 ```sh

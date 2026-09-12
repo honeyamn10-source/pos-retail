@@ -17,11 +17,15 @@ rows=[];out=root/'kits';out.mkdir(exist_ok=True)
 for mode in ['restaurant','retail']:
  title='Jawa_'+mode.title()+'_Server_Kit';kit=dict(files)
  kit['product.json']=(json.dumps({'name':'Jawa '+mode.title(),'mode':mode,'version':'0.3.0'})+'\n').encode()
- kit['START_HERE.md']=(f'# Jawa {mode.title()} server kit\n\nInstall Node.js 24 LTS, then run `node server-dist/main.js` in this folder.\nOpen http://localhost:8787 and create your owner account using `data/setup-token`.\n\nRead `docs/SERVER_INSTALL.md` for server/domain setup, staff, backup and recovery.\nThis is an installable controlled pilot; unfinished commercial features and\nexternal activation requirements are listed explicitly in that guide.\nBoth register routes share one engine. The default route for this kit is {mode}.\n').encode()
+ kit['START_HERE.md']=(f'# Jawa {mode.title()} server kit\n\nRead docs/EASY_SETUP.md first. Install Node.js 24 LTS and extract this whole kit.\nWindows: double-click START_JAWA.cmd. Mac: open START_JAWA.command.\nLinux: run `bash START_JAWA.sh` in this folder.\nThe launcher opens your browser and shows the one-time owner setup token.\nKeep the launch window open while using Jawa.\n\nRead docs/SERVER_INSTALL.md for server/domain setup, staff, backup and recovery.\nThis is an installable controlled pilot; unfinished commercial features and\nexternal activation requirements are listed explicitly in that guide.\nBoth register routes share one engine. The default route for this kit is {mode}.\n').encode()
  manifest={p:hashlib.sha256(b).hexdigest() for p,b in sorted(kit.items())};kit['SERVER_MANIFEST.json']=(json.dumps(manifest,indent=2)+'\n').encode()
  target=out/(title+'.zip')
  with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
-  for p,b in sorted(kit.items()):z.writestr(title+'/'+p,b)
+  for p,b in sorted(kit.items()):
+   entry=zipfile.ZipInfo(title+'/'+p);entry.create_system=3
+   entry.external_attr=(0o100755 if p in {'START_JAWA.sh','START_JAWA.command'} else 0o100644)<<16
+   entry.compress_type=zipfile.ZIP_DEFLATED
+   z.writestr(entry,b,compresslevel=6)
  with zipfile.ZipFile(target) as z:
   assert z.testzip() is None
   for p,h in manifest.items():assert hashlib.sha256(z.read(title+'/'+p)).hexdigest()==h,p

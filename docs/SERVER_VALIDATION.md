@@ -1,5 +1,25 @@
 # Server release validation — 11 September 2026
 
+## Easy setup update — 12 September 2026
+
+Added launchers for Windows, Mac and Linux, a short first-run guide, Node/build
+preflight checks, browser opening and one-time token display in the local launch
+window. New retail launcher installations use port 8788 to avoid the restaurant
+default. Existing environment configuration is preserved. ZIPs retain executable
+permissions for the Unix launchers.
+
+Four automated launcher scenarios passed on Linux with the real built server:
+restaurant and retail first launch from a different working directory, owner
+setup and restart persistence; invalid configuration/missing-build rejection;
+and an occupied-port failure without displaying the setup token. The launcher
+tests use `--no-browser`: desktop browser opening and Windows/Mac launch-file
+interaction still require validation on those systems. No payment, voice,
+marketplace or hardware activation is implied by this setup update.
+
+Reproduce with `node --test tests/launcher.test.mjs` after the server build.
+
+## Core server validation
+
 Executed on Linux with Node.js 24.19.0 and pnpm 11.19.0.
 
 - Locked dependency installation: passed after correcting an unresolved

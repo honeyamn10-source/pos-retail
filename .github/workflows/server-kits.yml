@@ -33,6 +33,7 @@ jobs:
         run: |
           pnpm run build:server
           pnpm run test:server
+          node --test tests/launcher.test.mjs
       - name: Package and verify both server kits
         run: python3 scripts/package-server-kits.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
