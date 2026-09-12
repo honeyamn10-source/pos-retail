@@ -1,0 +1,46 @@
+name: Validate and package Jawa server
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  server-kits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install pinned package manager and dependencies
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.19.0 --activate
+          pnpm install --frozen-lockfile
+      - name: Check types and business rules
+        run: |
+          pnpm run typecheck
+          pnpm test
+          python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Build and exercise the native server
+        run: |
+          pnpm run build:server
+          pnpm run test:server
+      - name: Package and verify both server kits
+        run: python3 scripts/package-server-kits.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: jawa-server-kits
+          path: |
+            kits/Jawa_Restaurant_Server_Kit.zip
+            kits/Jawa_Retail_Server_Kit.zip
+            kits/SERVER_KIT_INDEX.json
+          if-no-files-found: error
+          retention-days: 30
