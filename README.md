@@ -1,6 +1,10 @@
-# Jawa Retail — installable server edition
+# Jawa Retail
 
-Separate retail register with shared inventory, held carts and back office.
+A self-hosted retail register for cash sales, held carts, inventory, and back-office reporting.
+
+**Edition:** Installable server · **Version:** 0.4 · **Stage:** Controlled pilot
+
+[Deployment handbook](docs/CUSTOMER_DEPLOYMENT.md) · [Quick setup](docs/EASY_SETUP.md) · [Validation record](docs/SERVER_VALIDATION.md) · [Release readiness](docs/COMMERCIAL_LAUNCH_CHECKLIST.md)
 
 ## Version 0.4: start here
 
