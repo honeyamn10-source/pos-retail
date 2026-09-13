@@ -2,6 +2,16 @@
 
 Separate retail register with shared inventory, held carts and back office.
 
+## Version 0.4: start here
+
+- [Customer deployment and integration handbook](docs/CUSTOMER_DEPLOYMENT.md)
+- [Quick local setup](docs/EASY_SETUP.md)
+
+Open **Store control** after signing in for sales, queues, connection readiness,
+custom business-date CSV reports, staff and backups. Prebuilt kits include desktop
+launchers. Voice/printer connection helpers and a tested Linux/Python 3.12 SDK
+snapshot are included; real calls and hardware still need acceptance testing.
+
 ## Start
 
 Install Node.js 24 LTS and pnpm 11.19.0, then:

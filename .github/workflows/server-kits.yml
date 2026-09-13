@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   server-kits:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
@@ -33,8 +33,14 @@ jobs:
         run: |
           pnpm run build:server
           pnpm run test:server
-          node --test tests/launcher.test.mjs
-      - name: Package and verify both server kits
+          node --test tests/launcher.test.mjs tests/connections.test.mjs
+      - name: Check voice and printer SDK compatibility
+        run: |
+          python3 -m venv "$RUNNER_TEMP/jawa-sdk"
+          "$RUNNER_TEMP/jawa-sdk/bin/python" -m pip install -r integrations/requirements-linux-py312.lock.txt
+          "$RUNNER_TEMP/jawa-sdk/bin/python" integrations/check.py voice --sdk-only
+          "$RUNNER_TEMP/jawa-sdk/bin/python" integrations/check.py printer --sdk-only
+
         run: python3 scripts/package-server-kits.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

@@ -96,7 +96,7 @@ No audio recording is configured in this application.""")
 server = AgentServer()
 
 
-@server.rtc_session()
+@server.rtc_session(agent_name=os.environ.get("JAWA_AGENT_NAME", "jawa-orders"))
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
     participant = await ctx.wait_for_participant()
@@ -106,7 +106,8 @@ async def entrypoint(ctx: JobContext):
     async def close_journal():
         await asyncio.to_thread(agent.orders.close)
     ctx.add_shutdown_callback(close_journal)
-    session = AgentSession(vad=inference.VAD(), stt=inference.STT(required("JAWA_STT_MODEL")), llm=inference.LLM(required("JAWA_LLM_MODEL")), tts=inference.TTS(required("JAWA_TTS_MODEL")))
+    tts_options = {"voice": os.environ["JAWA_TTS_VOICE"]} if os.environ.get("JAWA_TTS_VOICE") else {}
+    session = AgentSession(vad=inference.VAD(), stt=inference.STT(required("JAWA_STT_MODEL")), llm=inference.LLM(required("JAWA_LLM_MODEL")), tts=inference.TTS(required("JAWA_TTS_MODEL"), **tts_options))
     await session.start(room=ctx.room, agent=agent)
     await session.generate_reply(instructions="Introduce yourself as the AI ordering assistant and ask how you can help.")
 

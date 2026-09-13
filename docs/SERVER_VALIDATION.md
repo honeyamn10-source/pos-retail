@@ -1,5 +1,37 @@
 # Server release validation — 11 September 2026
 
+## Current release 0.4 — 12 September 2026
+
+Added Store Control with summary metrics, queue shortcuts, setup steps, connection
+configuration status and latest successful API contact. Added owner-only business
+date CSV export, readable daily summary tables, a deployment-guide download and
+a native release-notes route. Private connection-file generation preserves existing
+server settings and produces distinct matching scope credentials. Voice dispatch
+now uses an explicit agent name and supports a configurable TTS voice.
+
+Executed verification for this update:
+
+- TypeScript and native production build: passed.
+- Business/repository and report tests: **74 passed**.
+- Launcher and private connection-generator scenarios: **6 passed**.
+- Standard-library Python adapter tests: **8 passed**.
+- Native HTTP integration checks: **85 passed**, including owner-only overview,
+  secret non-disclosure, latest voice API activity, CSV access/date validation and
+  deployment guide delivery.
+- LiveKit Agents 1.8.1 and python-escpos 3.1 installed in an isolated Linux/Python
+  3.12 environment. Agent/printer imports and VAD construction passed. Resolved
+  dependencies are in `integrations/requirements-linux-py312.lock.txt`.
+
+The browser service rejected the local visual-test URL with
+`net::ERR_BLOCKED_BY_CLIENT`. The redesigned UI has build/type coverage and its
+backend has HTTP tests, but rendered appearance and browser interactions were not
+verified. No screenshot of the new design is claimed. Earlier screenshots are
+historical examples. Live SIP, models, transfers, actual paper, real domain/server
+installation and Windows/Mac desktop acceptance remain unverified.
+
+The sections below retain the earlier release's verification history; their SDK
+installation limitation is superseded by the successful imports above.
+
 ## Easy setup update — 12 September 2026
 
 Added launchers for Windows, Mac and Linux, a short first-run guide, Node/build

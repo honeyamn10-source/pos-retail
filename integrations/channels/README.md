@@ -1,5 +1,13 @@
 # Online ordering and marketplace bridge
 
+> **Native server 0.4:** follow `docs/CUSTOMER_DEPLOYMENT.md` first. The native
+> server fixes the merchant identity to `local-store`; it does not require a Sites
+> gate token. Voice/printer SDK imports passed on Linux/Python 3.12, with a resolved
+> dependency snapshot and connection helpers included. The hosted-Site notes and
+> earlier unverified-SDK statements below describe the earlier managed release.
+> Native marketplace connectors and real-call/printer tests remain unfinished.
+
+
 ## Exact implementation status
 
 This release adds Jawa-owned pickup ordering and an operator inbox for `online`,

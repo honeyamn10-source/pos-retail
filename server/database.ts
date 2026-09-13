@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id TEXT NOT NULL
 CREATE TABLE IF NOT EXISTS throttle(key TEXT PRIMARY KEY,count INTEGER NOT NULL,reset INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS staff_audit(id INTEGER PRIMARY KEY,at TEXT NOT NULL,user_id TEXT NOT NULL,action TEXT NOT NULL,reference TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS daily_reports(day TEXT PRIMARY KEY,generated_at TEXT NOT NULL,revision INTEGER NOT NULL,payload TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS service_activity(scope TEXT PRIMARY KEY,last_seen TEXT NOT NULL,method TEXT NOT NULL);
 PRAGMA user_version=1;`);
 export const db={prepare(sql:string){return{bind(...values:(string|number)[]){return{
  async first(){return sqlite.prepare(sql).get(...values)??null;},

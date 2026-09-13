@@ -53,4 +53,7 @@ next-env.d.ts
 /work/
 /data/
 /server-dist/
+/kits/
+/.venv/
+/.jawa-venv/
 *.jawabak

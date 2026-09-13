@@ -1,8 +1,11 @@
 # Install Jawa on your server
 
-Jawa Server 0.3 is an installable **controlled pilot**, not a completed commercial
+Jawa Server 0.4 is an installable **controlled pilot**, not a completed commercial
 POS. It runs both register interfaces on one server; `product.json` chooses the
 restaurant or retail entry point. No ChatGPT account is needed for this edition.
+
+For the complete customer handover and connection walkthrough, start with
+[CUSTOMER_DEPLOYMENT.md](CUSTOMER_DEPLOYMENT.md).
 
 ## Fast start from a prebuilt Server Kit
 

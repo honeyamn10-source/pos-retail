@@ -1,4 +1,4 @@
-# Runtime candidates for compatibility testing, not a verified deployment lock.
-# Pin all resolved transitive versions after the target OS and devices are tested.
+# Direct runtime versions. Linux/Python 3.12 SDK imports were verified.
+# Reproduce with requirements-linux-py312.lock.txt; live calls/hardware remain unverified.
 livekit-agents==1.8.1
 python-escpos==3.1
