@@ -1,3 +1,5 @@
+![Jawa Retail — project cover](https://github.com/honeyamn10-source/honeyamn10-source/blob/main/assets/pos-retail.svg?raw=true)
+
 # Jawa Retail
 
 A self-hosted retail register for cash sales, held carts, inventory, and back-office reporting.
