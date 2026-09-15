@@ -3,6 +3,7 @@ import {mkdirSync,chmodSync,readFileSync,writeFileSync,existsSync,renameSync,unl
 import {resolve} from 'node:path';
 import {randomBytes,scryptSync,createCipheriv} from 'node:crypto';
 import {AsyncLocalStorage} from 'node:async_hooks';
+import {initializeLedger,syncLedger} from './ledger';
 export type Staff={id:string;username:string;role:'owner'|'manager'|'cashier'|'kitchen'};
 export const requestContext=new AsyncLocalStorage<{user:Staff|null;operationId?:string}>();
 export const directory=resolve(process.env.JAWA_DATA_DIR||'data');mkdirSync(directory,{recursive:true,mode:0o700});
@@ -16,9 +17,10 @@ CREATE TABLE IF NOT EXISTS staff_audit(id INTEGER PRIMARY KEY,at TEXT NOT NULL,u
 CREATE TABLE IF NOT EXISTS daily_reports(day TEXT PRIMARY KEY,generated_at TEXT NOT NULL,revision INTEGER NOT NULL,payload TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS service_activity(scope TEXT PRIMARY KEY,last_seen TEXT NOT NULL,method TEXT NOT NULL);
 PRAGMA user_version=1;`);
+initializeLedger(sqlite);
 export const db={prepare(sql:string){return{bind(...values:(string|number)[]){return{
  async first(){return sqlite.prepare(sql).get(...values)??null;},
- async run(){sqlite.exec('BEGIN IMMEDIATE');try{const r=sqlite.prepare(sql).run(...values),ctx=requestContext.getStore();if(Number(r.changes)===1&&sql.startsWith('UPDATE stores')&&ctx?.user)sqlite.prepare('INSERT INTO staff_audit(at,user_id,action,reference) VALUES(?,?,?,?)').run(new Date().toISOString(),ctx.user.id,'store mutation',ctx.operationId??'');sqlite.exec('COMMIT');return{meta:{changes:Number(r.changes)}};}catch(e){sqlite.exec('ROLLBACK');throw e;}}
+ async run(){sqlite.exec('BEGIN IMMEDIATE');try{const r=sqlite.prepare(sql).run(...values),ctx=requestContext.getStore();if(Number(r.changes)===1&&sql.startsWith('UPDATE stores')){const row=sqlite.prepare('SELECT revision,payload FROM stores WHERE owner=?').get(values[1]) as {revision:number;payload:string};syncLedger(sqlite,String(values[1]),JSON.parse(row.payload),row.revision);if(ctx?.user)sqlite.prepare('INSERT INTO staff_audit(at,user_id,action,reference) VALUES(?,?,?,?)').run(new Date().toISOString(),ctx.user.id,'store mutation',ctx.operationId??'');}sqlite.exec('COMMIT');return{meta:{changes:Number(r.changes)}};}catch(e){sqlite.exec('ROLLBACK');throw e;}}
 };}};}} as unknown as D1Database;
 export async function backupBytes(passphrase:string){
  if(passphrase.length<16||passphrase.length>128)throw new Error('Backup passphrase must have 16–128 characters.');

@@ -13,6 +13,7 @@ import {sqlite,requestContext,directory,automaticBackup,backupBytes} from './dat
 import {setupToken,hasOwner,setup,login,currentUser,cookie,tokenFrom,digest,throttle,createStaff,authorizeOperation,hashPassword,verifyPassword} from './auth';
 import {businessDate,report,emptyStore,type Store} from '../lib/engine';
 import {storeOverview,rangeSummary,summaryCsv} from './overview';
+import {history,receiptHistory} from './ledger';
 const mode=process.env.JAWA_MODE||(existsSync('product.json')?JSON.parse(readFileSync('product.json','utf8')).mode:'restaurant');
 if(!['restaurant','retail'].includes(mode))throw new Error('JAWA_MODE must be restaurant or retail.');
 const port=Number(process.env.JAWA_PORT||8787),host=process.env.JAWA_HOST||'127.0.0.1';
@@ -39,6 +40,11 @@ async function dispatch(req:Request,peer:string){const path=new URL(req.url).pat
  if(path==='/api/password'&&method==='POST'){if(!user)throw new RequestError('Sign in to continue.',401);throttle('password:'+user.id,5,600000);const body=await readJson(req,4000),row=sqlite.prepare('SELECT password FROM staff WHERE id=?').get(user.id) as {password:string};if(!await verifyPassword(body.currentPassword,row.password))throw new RequestError('Current password is incorrect.',403);const hash=await hashPassword(body.password);sqlite.exec('BEGIN IMMEDIATE');try{sqlite.prepare('UPDATE staff SET password=? WHERE id=?').run(hash,user.id);sqlite.prepare('DELETE FROM sessions WHERE user_id=?').run(user.id);sqlite.exec('COMMIT');}catch(e){sqlite.exec('ROLLBACK');throw e;}return json({ok:true},200,{'Set-Cookie':cookie('',secure)});}
  if(path.startsWith('/api/admin/')){
   if(!user)throw new RequestError('Sign in to continue.',401);if(user.role!=='owner')throw new RequestError('Owner access required.',403);
+  if(path==='/api/admin/history'&&method==='GET'){
+   const params=new URL(req.url).searchParams,id=params.get('id');
+   if(id!==null){const result=receiptHistory(sqlite,'local-store',id);if(!result)throw new RequestError('Receipt not found.',404);return json(result);}
+   try{return json(history(sqlite,'local-store',params));}catch{throw new RequestError('Choose valid history filters.',400);}
+  }
   if(path==='/api/admin/overview'&&method==='GET'){
    const row=sqlite.prepare('SELECT payload FROM stores WHERE owner=?').get('local-store') as {payload:string}|undefined;
    const state=row?JSON.parse(row.payload) as Store:emptyStore();
@@ -57,7 +63,7 @@ async function dispatch(req:Request,peer:string){const path=new URL(req.url).pat
   }
   if(path==='/api/admin/backup'&&method==='POST'){throttle('backup:'+user.id,3);const body=await readJson(req,4000);return new Response(new Uint8Array(await backupBytes(String(body.passphrase??''))),{headers:{...secureHeaders,'Content-Type':'application/octet-stream','Content-Disposition':'attachment; filename="jawa-backup.jawabak"'}});}
   if(path==='/api/admin/reports'&&method==='GET'){await housekeeping();return json({reports:sqlite.prepare('SELECT * FROM daily_reports ORDER BY day DESC LIMIT 366').all().map(r=>({...r,payload:JSON.parse(String(r.payload))}))});}
-  if(path==='/api/admin/diagnostics'&&method==='GET')return json({version:'0.4.0',mode,storage:sqlite.prepare('SELECT revision,length(payload) AS bytes FROM stores WHERE owner=?').get('local-store')??null,maintenanceError:lastMaintenanceError,staffAudit:sqlite.prepare('SELECT * FROM staff_audit ORDER BY id DESC LIMIT 100').all(),limits:{products:2000,orders:1000,payloadBytes:1800000},notice:'Live service and hardware operation requires separate verification.'});
+  if(path==='/api/admin/diagnostics'&&method==='GET')return json({version:'0.5.0',mode,storage:sqlite.prepare('SELECT revision,length(payload) AS bytes FROM stores WHERE owner=?').get('local-store')??null,maintenanceError:lastMaintenanceError,staffAudit:sqlite.prepare('SELECT * FROM staff_audit ORDER BY id DESC LIMIT 100').all(),limits:{products:2000,orders:1000,payloadBytes:1800000},notice:'Live service and hardware operation requires separate verification.'});
   throw new RequestError('Not found.',404);
  }
  if(path==='/api/online')throttle('online:'+peer,120);

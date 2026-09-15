@@ -30,11 +30,19 @@ try{
  ok((await req('/api/state',{id:'online',type:'onlineSettings',enabled:true,prepMinutes:15},owner)).status,200);const menu=await req('/api/online');ok(menu.body.privatePreview,false);ok(menu.body.products[0].cost,undefined);
  const pickup={id:'native-online-pickup',action:'submit',mode:'retail',customer:'Native pickup',notes:'',items:[{productId:'sample-1',qty:1}],expectedTotal:2034,receiptKey:'d'.repeat(64),confirmed:true};const requested=await req('/api/online',pickup);ok(requested.status,200);ok(requested.body.status,'pending');ok((await req('/api/state',{id:'accept-online',type:'channelAccept',requestId:pickup.id,confirmed:true},cashier)).status,200);
  ok((await req('/api/admin/diagnostics',undefined,owner)).body.staffAudit.some(x=>x.reference==='cash-sale'),true);
+ const journal=await req('/api/admin/history',undefined,owner);ok(journal.status,200);ok(journal.body.orders.map(o=>o.number),[1004,1003,1002,1001]);ok(journal.body.nextBefore,null);ok(journal.body.orders[0].reference,undefined);
+ ok((await req('/api/admin/history?number=1001&mode=retail&status=paid',undefined,owner)).body.orders[0].id,'cash-sale');
+ ok((await req('/api/admin/history?before=1003',undefined,owner)).body.orders.map(o=>o.number),[1002,1001]);
+ ok((await req('/api/admin/history?number=1001&mode=restaurant',undefined,owner)).body.orders.length,0);
+ const receipt=(await req('/api/admin/history?id=cash-sale',undefined,owner)).body;ok(receipt.order.total,2034);ok(receipt.versions,1);ok(receipt.refunds.length,0);
+ ok((await req('/api/admin/history?id=food-sale',undefined,owner)).body.versions,2);
+ ok((await req('/api/admin/history?id=missing',undefined,owner)).status,404);ok((await req('/api/admin/history?from=2026-02-30',undefined,owner)).status,400);
+ ok((await req('/api/admin/history',undefined,cashier)).status,403);ok((await req('/api/admin/history?id=cash-sale',undefined,kitchen)).status,403);ok((await req('/api/admin/history')).status,401);
  for(const path of ['/','/restaurant','/retail','/admin','/order/restaurant','/order/retail'])ok((await req(path)).status,200);
  ok((await req('/')).headers.get('x-content-type-options'),'nosniff');ok((await req('/data/jawa.sqlite')).status,404);ok((await req('/.env.server')).status,404);
  ok((await req('/api/admin/backup',{passphrase:'short'},owner)).status,400);const b=await req('/api/admin/backup',{passphrase:' backup-test-passphrase-2026 '},owner);ok(b.status,200);ok(b.body.subarray(0,8).toString(),'JAWABAK1');
  const bf=join(dir,'export.jawabak'),pf=join(dir,'phrase'),target=join(dir,'restored');writeFileSync(bf,b.body);writeFileSync(pf,' backup-test-passphrase-2026 ');const r=spawnSync(process.execPath,['server/restore.mjs',bf,pf,target],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);checks++;
- const db=new DatabaseSync(join(target,'jawa.sqlite'));ok(db.prepare('SELECT count(*) AS n FROM sessions').get().n,0);ok(JSON.parse(db.prepare('SELECT payload FROM stores').get().payload).orders.length,4);db.close();ok(spawnSync(process.execPath,['server/restore.mjs',bf,pf,target]).status,1);
+ const db=new DatabaseSync(join(target,'jawa.sqlite'));ok(db.prepare('SELECT count(*) AS n FROM sessions').get().n,0);ok(JSON.parse(db.prepare('SELECT payload FROM stores').get().payload).orders.length,4);ok(db.prepare('SELECT count(*) AS n FROM ledger_orders').get().n,4);ok(db.prepare('SELECT count(*) AS n FROM ledger_order_versions').get().n,5);ok(db.prepare('SELECT revision FROM ledger_coverage').get().revision,db.prepare('SELECT revision FROM stores').get().revision);db.close();ok(spawnSync(process.execPath,['server/restore.mjs',bf,pf,target]).status,1);
  const broken=Buffer.from(b.body);broken[70]^=1;writeFileSync(join(dir,'broken.jawabak'),broken);ok(spawnSync(process.execPath,['server/restore.mjs',join(dir,'broken.jawabak'),pf,join(dir,'bad')]).status,1);
  const overview=(await req('/api/admin/overview',undefined,owner)).body;ok(overview.storage.orders,4);ok(overview.integrations.find(i=>i.id==='voice').status,'API configured');ok(JSON.stringify(overview).includes(secret),false);ok(overview.activity.some(a=>a.scope==='voice'),true);
  ok((await req('/api/admin/overview',undefined,cashier)).status,403);ok((await req('/api/admin/overview')).status,401);
@@ -48,5 +56,6 @@ try{
  await start();const summary=await req('/api/admin/reports',undefined,changed);ok(summary.status,200);const closed=summary.body.reports.find(r=>r.day==='2026-01-05');ok(closed.payload.count,1);ok(closed.payload.cash,2034);ok(closed.payload.tax,234);ok(existsSync(join(dir,'backup.key')),true);ok(existsSync(join(dir,'backups',new Date().toISOString().slice(0,10)+'.jawabak')),true);
  ok((await req('/api/logout',{},changed)).status,200);ok((await req('/api/state',undefined,changed)).status,401);
  await stop();await start(target);ok((await req('/api/state',undefined,changed)).status,401);const restored=await logIn('owner');ok((await req('/api/state',undefined,restored)).body.state.orders.length,4);
+ ok((await req('/api/admin/history?id=cash-sale',undefined,restored)).body.order.total,2034);ok((await req('/api/admin/history?id=food-sale',undefined,restored)).body.versions,2);
  console.log(JSON.stringify({standaloneServerChecks:checks,passed:true}));
 }finally{await stop();rmSync(dir,{recursive:true,force:true});}

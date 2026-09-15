@@ -1,6 +1,34 @@
-# Server release validation — 11 September 2026
+# Server release validation
 
-## Current release 0.4 — 12 September 2026
+## Current release 0.5 — 15 September 2026
+
+Added an additive native SQLite journal and owner-only order history. Each changed
+order snapshot, refund, stock movement, business audit entry and operation retry
+record is journaled within the same transaction as the store update. Startup and
+restore backfill current legacy records without inventing prior intermediate
+versions. The History screen filters and pages records and downloads receipt JSON.
+
+Executed verification:
+
+- TypeScript and native production build passed.
+- **79 business/repository tests passed**, including five new ledger tests for
+  repeatable migration, duplicate/partial-refund history, fault-injected rollback,
+  immutable-record preservation and 105-record pagination/merchant isolation.
+- **106 native HTTP checks passed**, including list/detail/filter access,
+  denied anonymous/staff access, invalid filters, and encrypted backup/recovery
+  preserving four receipts, five order versions and matching journal revision.
+- **6 launcher/connection-generator tests** and **8 Python adapter tests** passed.
+
+This is a foundation for future storage work, not completed archiving. The
+1,000-order and 1.8 MB working-state limits remain; no records or retry identifiers
+are removed. Journal writes currently inspect the bounded working state and need
+further normalization/performance work before lifting those limits. No dependencies
+were added or upgraded. Live payment, call, marketplace and hardware acceptance
+remain outstanding. Rendered browser verification is still unavailable because
+the browser service blocked the local test URL in the previous release; this
+release has no new visual-verification claim.
+
+## Release 0.4 — 12 September 2026
 
 Added Store Control with summary metrics, queue shortcuts, setup steps, connection
 configuration status and latest successful API contact. Added owner-only business

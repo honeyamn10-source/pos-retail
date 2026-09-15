@@ -4,11 +4,11 @@
 
 A self-hosted retail register for cash sales, held carts, inventory, and back-office reporting.
 
-**Edition:** Installable server · **Version:** 0.4 · **Stage:** Controlled pilot
+**Edition:** Installable server · **Version:** 0.5 · **Stage:** Controlled pilot
 
 [Deployment handbook](docs/CUSTOMER_DEPLOYMENT.md) · [Quick setup](docs/EASY_SETUP.md) · [Validation record](docs/SERVER_VALIDATION.md) · [Release readiness](docs/COMMERCIAL_LAUNCH_CHECKLIST.md)
 
-## Version 0.4: start here
+## Version 0.5: start here
 
 - [Customer deployment and integration handbook](docs/CUSTOMER_DEPLOYMENT.md)
 - [Quick local setup](docs/EASY_SETUP.md)
@@ -17,6 +17,11 @@ Open **Store control** after signing in for sales, queues, connection readiness,
 custom business-date CSV reports, staff and backups. Prebuilt kits include desktop
 launchers. Voice/printer connection helpers and a tested Linux/Python 3.12 SDK
 snapshot are included; real calls and hardware still need acceptance testing.
+
+Version 0.5 adds owner-only searchable order history and a SQLite transaction
+journal committed atomically with sales, refunds and stock movements. Backups
+include the journal. Existing receipts are migrated automatically; the working
+order and payload limits remain. Read the handbook before upgrading.
 
 ## Start
 

@@ -1,6 +1,6 @@
 # Jawa POS — customer deployment & integration handbook
 
-Updated 12 September 2026 · Separate Restaurant and Retail server kits
+Updated 15 September 2026 · Version 0.5 · Separate Restaurant and Retail server kits
 
 ## 1. What you are installing
 
@@ -63,7 +63,7 @@ A configuration-only check is `node scripts/start-local.mjs --check`.
 ## 4. Set up the merchant in the application
 
 Open **Store control** in the top bar (`/admin`). The owner sees Overview,
-Connections, Reports, and Staff & backups. Refresh reads actual store records.
+Connections, Reports, History, and Staff & backups. Refresh reads actual store records.
 Connection labels say whether the API is configured; they do not certify a live call
 or printer. Successful integration requests appear with their latest contact time.
 
@@ -321,6 +321,27 @@ and refunds follow the configured timezone/cutoff. Platform-collected amounts st
 separate from drawer cash. Daily summaries catch up after restart and update after
 late adjustments; they are not immutable accounting closes or settlement records.
 
+**Order history:** open Store control → History as the owner. Search by order
+number, creation business date, register and current payment status. Results are
+newest first, 50 per page. Use **Search history** to reload and **Older orders** to
+continue. **View** opens original item prices, current refunded quantities, refund
+reasons and a downloadable JSON business record. This download is not a payment
+provider's receipt. A partially refunded order remains under Paid until all items
+are refunded. History dates follow order creation; revenue reports follow payment
+and refund dates, so their counts can differ.
+
+Version 0.5 adds a separate SQLite transaction journal to the native server. It
+records changed order snapshots, refunds, stock movements, audit entries and
+operation retry records in the same database transaction as the register state.
+If journaling fails, the store update rolls back. Existing records are backfilled
+on first startup; versions from before the upgrade cannot be reconstructed. The
+application rejects removal or rewriting of immutable journal records. This is
+not a tamper-proof accounting system against someone with direct server/database
+access. The journal occupies additional disk space and is included in database
+backups. **The 1,000-order and 1.8 MB working-state limits still apply.** Nothing
+is pruned or reset by this release. The older hosted Worker edition does not use
+this native SQLite journal.
+
 Download encrypted backups in Staff & backups using a 16–128-character passphrase.
 Store the passphrase separately. Automatic UTC-day backups are in `data/backups`
 with their key in `data/backup.key`; protect the key and copy backups off the host.
@@ -336,6 +357,23 @@ node server/restore.mjs backup.jawabak /secure/passphrase.txt /new/jawa-data
 Point JAWA_DATA_DIR at that new directory and start one server process. Old sessions
 are revoked. Verify stock, orders, refunds, daily totals and cash before resuming.
 Never overwrite the only working database. See SERVER_INSTALL.md for details.
+
+### Upgrading an existing installation to 0.5
+
+1. Pause sales and integrations. Download an encrypted backup and securely save
+   the passphrase. Keep the existing kit and configuration for recovery.
+2. Stop the old server. Extract the new kit into a separate permanent folder.
+   Preserve `.env.server` and use the existing data directory through its absolute
+   `JAWA_DATA_DIR` path. Keep all other customer configuration and secrets intact.
+3. Start only the new server. It adds journal tables and backfills current records
+   automatically. If startup fails, stop and resolve the reported error; do not
+   delete records or retry with a blank database to bypass migration.
+4. Sign in, compare order count, a recent receipt/refund, stock, cash balance and
+   report totals with the pre-upgrade installation. Verify History and restore a
+   fresh encrypted backup into a separate test folder before resuming traffic.
+5. Do not run both versions against one database. Do not point an older binary at
+   an upgraded database. If rollback is needed, restore the pre-upgrade backup to
+   a new folder and account for every transaction recorded after that backup.
 
 ## 14. Handover checklist
 
