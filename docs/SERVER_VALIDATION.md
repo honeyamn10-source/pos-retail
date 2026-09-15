@@ -18,6 +18,10 @@ Executed verification:
   denied anonymous/staff access, invalid filters, and encrypted backup/recovery
   preserving four receipts, five order versions and matching journal revision.
 - **6 launcher/connection-generator tests** and **8 Python adapter tests** passed.
+- The extracted retail kit ran the same **106 HTTP checks without node_modules**.
+  Packaging verifies ZIP integrity and every file digest. The build now clears
+  generated output first and copies public OCR assets only into the served web
+  directory, preventing stale bundles and an unused second runtime OCR copy.
 
 This is a foundation for future storage work, not completed archiving. The
 1,000-order and 1.8 MB working-state limits remain; no records or retry identifiers
