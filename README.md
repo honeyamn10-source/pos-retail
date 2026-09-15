@@ -1,31 +1,34 @@
-![Jawa Retail — project cover](https://github.com/honeyamn10-source/honeyamn10-source/blob/main/assets/pos-retail.svg?raw=true)
+<p align="center">
+  <img src="https://github.com/honeyamn10-source/honeyamn10-source/blob/main/assets/pos-retail.svg?raw=true" alt="Jawa Retail" width="100%" />
+</p>
 
-# Jawa Retail
+<h1 align="center">Jawa Retail</h1>
 
-A self-hosted retail register for cash sales, held carts, inventory, and back-office reporting.
+<p align="center">
+  <b>A self-hosted retail register.</b>
+  <br />
+  <em>Cash sales, held carts, inventory, and back-office reporting — on your own server.</em>
+</p>
 
-**Edition:** Installable server · **Version:** 0.5 · **Stage:** Controlled pilot
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="product.json"><img src="https://img.shields.io/badge/version-0.5-blue.svg" alt="Version: 0.5"></a>
+  <a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/SERVER_VALIDATION.md"><img src="https://img.shields.io/badge/stage-controlled%20pilot-important.svg" alt="Stage: Controlled pilot"></a>
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/next.js-15-000000.svg" alt="Next.js 15"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/typescript-5-3178C6.svg" alt="TypeScript"></a>
+</p>
 
-[Deployment handbook](docs/CUSTOMER_DEPLOYMENT.md) · [Quick setup](docs/EASY_SETUP.md) · [Validation record](docs/SERVER_VALIDATION.md) · [Release readiness](docs/COMMERCIAL_LAUNCH_CHECKLIST.md)
+---
 
-## Version 0.5: start here
+**Edition:** Installable server · **Stage:** Controlled pilot
 
-- [Customer deployment and integration handbook](docs/CUSTOMER_DEPLOYMENT.md)
-- [Quick local setup](docs/EASY_SETUP.md)
+Self-host means your data stays yours: no cloud subscription, no forced login, no merchant database on a third-party server. Sales, held carts, inventory, and backups persist on a server you control.
 
-Open **Store control** after signing in for sales, queues, connection readiness,
-custom business-date CSV reports, staff and backups. Prebuilt kits include desktop
-launchers. Voice/printer connection helpers and a tested Linux/Python 3.12 SDK
-snapshot are included; real calls and hardware still need acceptance testing.
+> **Status: installable controlled pilot, not a completed commercial POS.** Cash sales/returns, held carts, inventory, and back-office reporting work in the tested scenarios. Live card payments and physical printer acceptance remain unfinished or unverified. The current bounded store supports at most 1,000 orders; long-term storage is a remaining release gate.
 
-Version 0.5 adds owner-only searchable order history and a SQLite transaction
-journal committed atomically with sales, refunds and stock movements. Backups
-include the journal. Existing receipts are migrated automatically; the working
-order and payload limits remain. Read the handbook before upgrading.
+## 🚀 Quick start
 
-## Start
-
-Install Node.js 24 LTS and pnpm 11.19.0, then:
+Install **Node.js 24 LTS** and **pnpm 11.19.0**, then:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -33,24 +36,60 @@ pnpm run build:server
 pnpm run start:server
 ```
 
-Open http://localhost:8787. Use `data/setup-token` to create your owner account.
-No default password or ChatGPT login is required. Data persists on your server.
+Open [http://localhost:8787](http://localhost:8787). Use `data/setup-token` to create your owner account — no default password or ChatGPT login is required. Data persists on your server.
 
-- [Installation, domain setup and recovery](docs/SERVER_INSTALL.md)
-- [GitHub component assessment](docs/REPOSITORY_RESEARCH.md)
-- [Executed validation](docs/SERVER_VALIDATION.md)
-- [Commercial release gaps](docs/COMMERCIAL_LAUNCH_CHECKLIST.md)
+## ✨ Features
 
-**Status: installable controlled pilot, not a completed commercial POS.**
-Cash sales/returns, inventory, tables, kitchen, online pickup requests, staff action
-permissions and encrypted backup/recovery work in the tested scenarios. Live card
-payments, native DoorDash/Uber/Skip connections, physical printer acceptance and
-real phone-call activation remain unfinished or unverified. The current bounded
-store supports at most 1,000 orders; long-term storage is a remaining release gate.
+- 💵 **Cash sales & returns** with a SQLite transaction journal committed atomically with stock movements
+- 🛒 **Held carts** for pending purchases
+- 📦 **Inventory** with automatic stock updates
+- 👥 **Staff action permissions** with per-role controls
+- 🔍 **Owner-only searchable order history** (new in 0.5)
+- 📊 **Custom business-date CSV reports**
+- 💾 **Encrypted backup & recovery** including the journal
+- 🖥️ **Desktop launchers** for prebuilt kits
 
-The restaurant register remains available on `/restaurant`; this repository defaults to
-`/retail`. Both use the same transaction engine. For a shared store use one
-server installation, not two independent databases.
+The restaurant register remains available on `/restaurant`; this repository defaults to `/retail`. Both use the same transaction engine. For a shared store use one server installation, not two independent databases.
 
-Large OCR assets are reproduced during build from locked packages. No secrets,
-merchant database, node_modules or private hosting project identifier are included.
+## 📖 Getting started
+
+| Guide | Covers |
+| --- | --- |
+| [Deployment handbook](docs/CUSTOMER_DEPLOYMENT.md) | Customer deployment and integration |
+| [Quick setup](docs/EASY_SETUP.md) | Fast local setup |
+| [Server installation](docs/SERVER_INSTALL.md) | Installation, domain setup and recovery |
+| [Server validation](docs/SERVER_VALIDATION.md) | Executed validation record |
+| [Commercial launch checklist](docs/COMMERCIAL_LAUNCH_CHECKLIST.md) | Release readiness and open gates |
+
+## 📁 Repository layout
+
+```
+pos-retail/
+├── app/                 # Next.js application routes
+├── components/          # UI components
+├── server/              # Server / API logic
+├── db/ + drizzle/       # Database schema and migrations
+├── docs/                # Deployment, validation and research docs
+├── deploy/              # Deployment configuration
+├── public/              # Static assets
+├── scripts/             # Build & operational helpers
+├── tests/               # Test suite
+├── START_JAWA.*         # Desktop launcher scripts
+└── docs/                # Documentation
+```
+
+## 🛡️ Security
+
+- Owner account created via a secure setup token — no default passwords
+- Sessions and staff permissions enforced server-side
+- No secrets, merchant database, `node_modules`, or private hosting identifiers in this repository
+- Large OCR assets are reproduced during build from locked packages
+- See [SECURITY.md](SECURITY.md) for the vulnerability policy
+
+## 🤝 Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) before opening a pull request. Third-party components carry their own licenses — see [docs/THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md).
+
+## 📄 License
+
+[MIT](LICENSE) © 2026 [Bittu Sharma](https://github.com/honeyamn10-source). Third-party assets and components retain their original licenses and notices.

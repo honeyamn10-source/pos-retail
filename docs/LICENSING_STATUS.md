@@ -1,8 +1,13 @@
 # Licensing status
 
-This file records the current documentation review. It does not grant a new license to this repository or certify every dependency and asset for redistribution.
+This file records the licensing review for this repository. The project's own code and documentation are distributed under the [MIT License](../LICENSE). Third-party components, models, and assets are **not** covered by that MIT grant — they retain their original licenses and required notices, which remain in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-No root project license was found during this review. Existing third-party notices remain in place. Before distribution or commercial licensing, confirm ownership of the original code and assets, inventory dependencies, preserve required notices, and review the exact components being shipped.
+Before distribution or commercial licensing, continue to:
+
+1. Confirm ownership of the original code and assets in each release artifact.
+2. Inventory dependencies and preserve the licenses/notices they require.
+3. Verify that any newly added third-party module is compatible with the project's MIT licensed code.
+4. Review the exact components being shipped in every kit.
 
 ## Candidate upstream projects
 
