@@ -20,7 +20,7 @@
     "test:server": "node scripts/verify-server.mjs"
   },
   "dependencies": {
-    "@base-ui/react": "^1.7.0",
+    "@base-ui/react": "^1.8.0",
     "@hookform/resolvers": "^5.7.1",
     "@shadcn/react": "^0.3.0",
     "@tesseract.js-data/eng": "1.0.0",
