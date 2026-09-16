@@ -1,34 +1,28 @@
-<p align="center">
-  <img src="https://github.com/honeyamn10-source/honeyamn10-source/blob/main/assets/pos-retail.svg?raw=true" alt="Jawa Retail" width="100%" />
-</p>
+<p align="center"><img src="docs/assets/readme-cover.svg" alt="Jawa Retail — A dependable counter for everyday commerce." width="100%"></p>
 
 <h1 align="center">Jawa Retail</h1>
+<p align="center"><strong>A dependable counter for everyday commerce.</strong></p>
+<p align="center"><a href="#project-at-a-glance">Overview</a> · <a href="#start-here">Start here</a> · <a href="#project-guide">Project guide</a> · <a href="https://github.com/honeyamn10-source/pos-retail/issues">Issues</a></p>
 
-<p align="center">
-  <b>A self-hosted retail register.</b>
-  <br />
-  <em>Cash sales, held carts, inventory, and back-office reporting — on your own server.</em>
-</p>
+[![CI](https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml/badge.svg)](https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml)
 
-<p align="center">
-  <a href="https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml"><img src="https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml/badge.svg" alt="CI"></a>
-</p>
+Self-hosted cash sales, returns, held carts and stock reporting.
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="product.json"><img src="https://img.shields.io/badge/version-0.5-blue.svg" alt="Version: 0.5"></a>
-  <a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/SERVER_VALIDATION.md"><img src="https://img.shields.io/badge/stage-controlled%20pilot-important.svg" alt="Stage: Controlled pilot"></a>
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/next.js-15-000000.svg" alt="Next.js 15"></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/typescript-5-3178C6.svg" alt="TypeScript"></a>
-</p>
+## Project at a glance
 
----
+| Current scope | Release boundary |
+| --- | --- |
+| **Controlled pilot** | Long-term history, payment adapters and physical hardware need validation. |
 
-**Edition:** Installable server · **Stage:** Controlled pilot
+![Existing project preview](docs/screenshots/jawa-retail-register-20260911.jpg)
 
-Self-host means your data stays yours: no cloud subscription, no forced login, no merchant database on a third-party server. Sales, held carts, inventory, and backups persist on a server you control.
+<sub>Preview from the repository; it does not certify untested integrations.</sub>
 
-> **Status: installable controlled pilot, not a completed commercial POS.** Cash sales/returns, held carts, inventory, and back-office reporting work in the tested scenarios. Live card payments and physical printer acceptance remain unfinished or unverified. The current bounded store supports at most 1,000 orders; long-term storage is a remaining release gate.
+## Start here
+
+Use the setup commands in the project guide below. Check configuration and current workflow results before deploying.
+
+## Project guide
 
 ## 🚀 Quick start
 
@@ -79,7 +73,7 @@ pos-retail/
 ├── scripts/             # Build & operational helpers
 ├── tests/               # Test suite
 ├── START_JAWA.*         # Desktop launcher scripts
-└── docs/                # Documentation
+└── README.md            # Project guide
 ```
 
 ## 🛡️ Security
