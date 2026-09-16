@@ -11,6 +11,10 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml"><img src="https://github.com/honeyamn10-source/pos-retail/actions/workflows/server-kits.yml/badge.svg" alt="CI"></a>
+</p>
+
+<p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
   <a href="product.json"><img src="https://img.shields.io/badge/version-0.5-blue.svg" alt="Version: 0.5"></a>
   <a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/SERVER_VALIDATION.md"><img src="https://img.shields.io/badge/stage-controlled%20pilot-important.svg" alt="Stage: Controlled pilot"></a>
