@@ -1,0 +1,35 @@
+"""Package secret-free native server distributions and check every file digest."""
+import hashlib,json,subprocess,zipfile
+from pathlib import Path
+root=Path(__file__).resolve().parents[1]
+files={}
+excluded={'kits','node_modules','.git','dist','.wrangler','.sites-runtime','.agents','.codex','outputs','work','data','server-dist'}
+for name in sorted(set(subprocess.check_output(['git','ls-files','-co','--exclude-standard','-z'],cwd=root).decode().split('\0'))- {''}):
+ p=Path(name)
+ if p.parts[0] in excluded or '__pycache__' in p.parts or p.suffix in {'.pyc','.sqlite','.pem','.jawabak'} or (p.name.startswith('.env') and p.name!='.env.example'):continue
+ if (root/p).is_file() and not (root/p).is_symlink():files[name]=(root/p).read_bytes()
+files['.openai/hosting.json']=b'{"d1":"DB","r2":null}\n'
+files['next-env.d.ts']=b'/// <reference types="next" />\n/// <reference types="next/image-types/global" />\n'
+if not (root/'server-dist/main.js').exists():raise RuntimeError('Build the native server before packaging.')
+for p in (root/'server-dist').rglob('*'):
+ if p.is_file() and not p.is_symlink():files[p.relative_to(root).as_posix()]=p.read_bytes()
+rows=[];out=root/'kits';out.mkdir(exist_ok=True)
+for mode in ['restaurant','retail']:
+ title='Jawa_'+mode.title()+'_Server_Kit';kit=dict(files)
+ kit['product.json']=(json.dumps({'name':'Jawa '+mode.title(),'mode':mode,'version':'0.5.0'})+'\n').encode()
+ kit['START_HERE.md']=(f'# Jawa {mode.title()} server kit\n\nRead docs/CUSTOMER_DEPLOYMENT.md for the full deployment and integration guide.\nRead docs/EASY_SETUP.md first. Install Node.js 24 LTS and extract this whole kit.\nWindows: double-click START_JAWA.cmd. Mac: open START_JAWA.command.\nLinux: run `bash START_JAWA.sh` in this folder.\nThe launcher opens your browser and shows the one-time owner setup token.\nKeep the launch window open while using Jawa.\n\nRead docs/SERVER_INSTALL.md for server/domain setup, staff, backup and recovery.\nThis is an installable controlled pilot; unfinished commercial features and\nexternal activation requirements are listed explicitly in that guide.\nBoth register routes share one engine. The default route for this kit is {mode}.\n').encode()
+ kit['README.md']=(f'# Jawa {mode.title()} — server kit 0.5\n\nStart with START_HERE.md and docs/CUSTOMER_DEPLOYMENT.md.\nThe included launchers open the {mode} register by default.\nStore control (/admin) contains sales, queues, connections, history, reports, staff and backups.\n\nBoth register routes share one engine and one merchant database in this installation.\nUse a separate installation per customer. This is a controlled pilot; card payments,\nnative delivery connectors and long-term storage remain unfinished. Real calls and\nphysical printers still need configuration and acceptance tests.\n\nAll source is included. Read docs/SERVER_VALIDATION.md for executed tests and limits.\n').encode()
+ manifest={p:hashlib.sha256(b).hexdigest() for p,b in sorted(kit.items())};kit['SERVER_MANIFEST.json']=(json.dumps(manifest,indent=2)+'\n').encode()
+ target=out/(title+'.zip')
+ with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
+  for p,b in sorted(kit.items()):
+   entry=zipfile.ZipInfo(title+'/'+p);entry.create_system=3
+   entry.external_attr=(0o100755 if p in {'START_JAWA.sh','START_JAWA.command'} else 0o100644)<<16
+   entry.compress_type=zipfile.ZIP_DEFLATED
+   z.writestr(entry,b,compresslevel=6)
+ with zipfile.ZipFile(target) as z:
+  assert z.testzip() is None
+  for p,h in manifest.items():assert hashlib.sha256(z.read(title+'/'+p)).hexdigest()==h,p
+  assert not any('/data/' in p or '/node_modules/' in p or p.endswith('/.env.server') for p in z.namelist())
+ rows.append({'file':target.name,'bytes':target.stat().st_size,'files':len(kit),'sha256':hashlib.sha256(target.read_bytes()).hexdigest()})
+(out/'SERVER_KIT_INDEX.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(rows,indent=2))

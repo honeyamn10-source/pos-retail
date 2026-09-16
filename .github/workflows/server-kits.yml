@@ -1,0 +1,54 @@
+name: Validate and package Jawa server
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  server-kits:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install pinned package manager and dependencies
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.19.0 --activate
+          pnpm install --frozen-lockfile
+      - name: Check types and business rules
+        run: |
+          pnpm run typecheck
+          pnpm test
+          python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Build and exercise the native server
+        run: |
+          pnpm run build:server
+          pnpm run test:server
+          node --test tests/launcher.test.mjs tests/connections.test.mjs
+      - name: Check voice and printer SDK compatibility
+        run: |
+          python3 -m venv "$RUNNER_TEMP/jawa-sdk"
+          "$RUNNER_TEMP/jawa-sdk/bin/python" -m pip install -r integrations/requirements-linux-py312.lock.txt
+          "$RUNNER_TEMP/jawa-sdk/bin/python" integrations/check.py voice --sdk-only
+          "$RUNNER_TEMP/jawa-sdk/bin/python" integrations/check.py printer --sdk-only
+
+      - name: Package and verify both server kits
+        run: python3 scripts/package-server-kits.py
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jawa-server-kits
+          path: |
+            kits/Jawa_Restaurant_Server_Kit.zip
+            kits/Jawa_Retail_Server_Kit.zip
+            kits/SERVER_KIT_INDEX.json
+          if-no-files-found: error
+          retention-days: 30

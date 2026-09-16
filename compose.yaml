@@ -1,0 +1,18 @@
+services:
+  jawa:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    env_file: .env.server
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - jawa-data:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/healthz',{headers:{host:new URL(process.env.JAWA_ORIGIN||'http://localhost:8787').host}}).then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  jawa-data:
