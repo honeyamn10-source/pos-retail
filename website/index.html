@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pos-retail — a self-hosted retail register you control</title>
+  <meta name="description" content="pos-retail is a self-hosted retail register: cash sales & returns, held carts, inventory, staff permissions and back-office CSV reporting — running on a server you control, no cloud subscription, no forced login.">
+  <meta name="keywords" content="pos, retail, register, self-hosted, inventory, cash sales, held carts, sqlite, next.js, hono, cloudflare">
+  <meta name="author" content="Bittu Sharma">
+  <link rel="canonical" href="https://honeyamn10-source.github.io/pos-retail/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="pos-retail">
+  <meta property="og:title" content="pos-retail — a self-hosted retail register you control">
+  <meta property="og:description" content="Cash sales, held carts, inventory and back-office reporting on a server you own. No cloud subscription, no forced login.">
+  <meta property="og:url" content="https://honeyamn10-source.github.io/pos-retail/">
+  <meta property="og:image" content="https://honeyamn10-source.github.io/pos-retail/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="pos-retail — a self-hosted retail register you control">
+  <meta name="twitter:description" content="Cash sales, held carts, inventory and back-office reporting on a server you own.">
+  <meta name="twitter:image" content="https://honeyamn10-source.github.io/pos-retail/og.png">
+  <meta name="twitter:creator" content="@honeyamn10-source">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#03101a">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "pos-retail",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Node.js 24+ (self-hosted)",
+    "description": "Self-hosted retail register: cash sales & returns, held carts, inventory, staff permissions and back-office CSV reporting.",
+    "author": { "@type": "Person", "name": "Bittu Sharma" },
+    "url": "https://honeyamn10-source.github.io/pos-retail/",
+    "license": "https://github.com/honeyamn10-source/pos-retail/blob/main/LICENSE",
+    "codeRepository": "https://github.com/honeyamn10-source/pos-retail"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="pos-retail home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0ea5e9"/><text x="32" y="45" font-family="ui-monospace,Consolas,monospace" font-size="34" font-weight="700" fill="#03101a" text-anchor="middle">r</text></svg>
+        pos-retail
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#status">Status</a>
+        <a href="#install">Run it</a>
+        <a href="#security">Security</a>
+        <a href="#docs">Docs</a>
+        <a href="https://github.com/honeyamn10-source/pos-retail" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme">☀️</button>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="hero-inner">
+            <span class="status"><span class="dot" aria-hidden="true"></span> v0.5.0 · controlled pilot · MIT</span>
+            <h1>Code you can click, data you control.</h1>
+            <p class="lede">Portfolio POS systems usually contain code but nothing you can click. pos-retail is a living demonstration: a self-hosted retail register with cash sales, held carts, inventory and back-office reports — no cloud subscription, no forced login, no third-party merchant database.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="#install">Run it on your server</a>
+              <a class="btn btn-ghost" href="https://github.com/honeyamn10-source/pos-retail" target="_blank" rel="noopener">View on GitHub</a>
+            </div>
+          </div>
+          <div class="term" role="img" aria-label="Terminal showing pos-retail building and starting on localhost:8787">
+            <div class="term-bar"><i class="t1"></i><i class="t2"></i><i class="t3"></i><span>pnpm run start:server</span></div>
+            <div class="term-body"><span class="c2">$</span> <span class="c1">pnpm install --frozen-lockfile</span>
+ ✓ dependencies resolved (pnpm 11)
+<span class="c2">$</span> <span class="c1">pnpm run build:server</span>
+ ✓ server bundle built
+<span class="c2">$</span> <span class="c1">pnpm run start:server</span>
+ pos-retail 0.5.0
+ listening on <span class="c1">127.0.0.1:8787</span>
+ data dir  ./.data
+ setup-token → create your owner account
+     <span class="dim">(no default password exists)</span>
+<span class="ok">✓ register ready — your data, your server</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ METRICS ============ -->
+    <section class="section section-soft">
+      <div class="wrap">
+        <div class="metrics" data-reveal>
+          <div class="metric"><b>8787</b><span>loopback-only port by default</span></div>
+          <div class="metric"><b>3</b><span>architecture decision records</span></div>
+          <div class="metric"><b>0</b><span>default passwords — owner created via setup token</span></div>
+          <div class="metric"><b>1,000</b><span>order bound of the current bounded store</span></div>
+          <div class="metric"><b>✓</b><span>encrypted backup &amp; recovery incl. the journal</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <span class="eyebrow">Capabilities</span>
+        <h2>What an honest cash register does</h2>
+        <div class="grid grid-3" style="margin-top:34px">
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">💵</span>
+            <h3>Cash sales &amp; returns</h3>
+            <p>A SQLite transaction journal committed atomically with stock movements — money and inventory move together or not at all.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🛒</span>
+            <h3>Held carts</h3>
+            <p>Pause a sale and come back to it later, nothing lost while the counter gets busy.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">📦</span>
+            <h3>Inventory with live stock</h3>
+            <p>Stock levels update automatically from each completed transaction.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">👥</span>
+            <h3>Staff action permissions</h3>
+            <p>Per-role controls enforced server-side — not a cosmetic UI toggle.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🔍</span>
+            <h3>Owner-only order history</h3>
+            <p>A searchable history of every transaction, visible only to the owner.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">📊</span>
+            <h3>Business-date CSV reports</h3>
+            <p>Custom reports aligned to your business date for day-end and back-office use.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">💾</span>
+            <h3>Encrypted backup &amp; recovery</h3>
+            <p>Backups include the transaction journal and restore the complete register state.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🖥️</span>
+            <h3>Desktop launchers</h3>
+            <p>Prebuilt-kit launchers for Windows, macOS and Linux get a register up fast.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ARCHITECTURE ============ -->
+    <section class="section section-soft" id="architecture">
+      <div class="wrap">
+        <span class="eyebrow">Architecture</span>
+        <h2>Next.js UI, Hono API, SQLite on your machine</h2>
+        <div class="pipe" style="margin-top:26px; padding:24px; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-raised)">
+          <span class="node"><b>Next.js 15 UI</b> React 18 + Tailwind</span><span class="arr">→</span>
+          <span class="node"><b>Hono API</b> Cloudflare Workers runtime</span><span class="arr">→</span>
+          <span class="node"><b>SQLite + Drizzle ORM</b> transaction journal</span>
+          <span class="arr" aria-hidden="true">|</span>
+          <span class="node"><b>REST + WebSocket</b></span><span class="arr">→</span>
+          <span class="node"><b>127.0.0.1:8787</b> loopback only</span><span class="arr">→</span>
+          <span class="node"><b>encrypted backups</b></span>
+        </div>
+        <div class="ftable" style="margin-top:30px">
+          <table class="ftable">
+            <thead><tr><th>Layer</th><th>Responsibility</th></tr></thead>
+            <tbody>
+              <tr><td><code>app/</code></td><td>Next.js App Router UI — register, cash drawer, print queue, online order, manage.</td></tr>
+              <tr><td><code>server/</code></td><td>Hono API on the Cloudflare Workers runtime; sessions &amp; permissions enforced here.</td></tr>
+              <tr><td><code>db/</code> · <code>drizzle/</code></td><td>SQLite schema and Drizzle ORM, migrations versioned.</td></tr>
+              <tr><td><code>integrations/</code></td><td>Extensibility seams for payments and printing (live card payments unfinished).</td></tr>
+              <tr><td><code>docs/decisions/</code></td><td>ADRs 0001–0003: architecture, loopback-only serving, honest transaction data.</td></tr>
+              <tr><td><code>tests/</code></td><td>Registry API, engine, ledger, cash drawer and launcher tests.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATUS ============ -->
+    <section class="section" id="status">
+      <div class="wrap">
+        <span class="eyebrow">Honest status</span>
+        <h2>Descriptions stay ahead of the code they describe</h2>
+        <div class="grid" style="grid-template-columns:1fr 1fr; gap:22px">
+          <div class="card">
+            <h3>Works today, verified</h3>
+            <ul style="margin:8px 0 0; padding-left:18px; line-height:2">
+              <li>Cash sales &amp; returns with atomic journal + stock movements</li>
+              <li>Held carts for pending purchases</li>
+              <li>Inventory with automatic stock updates</li>
+              <li>Staff action permissions, enforced server-side</li>
+              <li>Owner-only searchable order history</li>
+              <li>Business-date CSV reports</li>
+              <li>Encrypted backup &amp; recovery including the journal</li>
+              <li>Desktop launchers for prebuilt kits</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Remaining release gates</h3>
+            <ul style="margin:8px 0 0; padding-left:18px; line-height:2">
+              <li><strong>Live card payments</strong> — unfinished or unverified</li>
+              <li><strong>Physical printer acceptance</strong> — not verified</li>
+              <li><strong>Bounded store</strong> — supports at most 1,000 orders today</li>
+              <li><strong>Long-term storage</strong> — a remaining release gate</li>
+            </ul>
+            <div class="note" style="margin-top:16px"><strong>Not a completed commercial POS.</strong> An installable controlled pilot for honest evaluation, ready to become one.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSTALL ============ -->
+    <section class="section section-soft" id="install">
+      <div class="wrap">
+        <span class="eyebrow">Run it</span>
+        <h2>Your server, your data, four commands</h2>
+        <div class="grid" style="grid-template-columns:1fr 1fr; gap:22px; margin-top:30px">
+          <div class="card">
+            <h3>Local quick start</h3>
+<pre><code>git clone https://github.com/honeyamn10-source/pos-retail.git
+cd pos-retail
+pnpm install --frozen-lockfile     # Node 20 LTS / pnpm 9+
+pnpm run build:server
+pnpm run start:server</code></pre>
+            <p style="font-size:0.9rem;margin-top:12px">Open <code>http://localhost:8787</code> and use <code>data/setup-token</code> to create your owner account.</p>
+          </div>
+          <div class="card">
+            <h3>Guides</h3>
+            <ul style="margin:0; padding-left:18px; line-height:2">
+              <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/EASY_SETUP.md">Fast local setup</a></li>
+              <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/SERVER_INSTALL.md">Server install &amp; recovery</a></li>
+              <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/CUSTOMER_DEPLOYMENT.md">Customer deployment</a></li>
+              <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/SERVER_VALIDATION.md">Executed validation record</a></li>
+              <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/COMMERCIAL_LAUNCH_CHECKLIST.md">Launch checklist &amp; open gates</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECURITY ============ -->
+    <section class="section" id="security">
+      <div class="wrap">
+        <span class="eyebrow">Security</span>
+        <h2>Security posture you can verify in the repo</h2>
+        <div class="grid grid-2" style="margin-top:30px">
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🪙</span>
+            <h3>No default passwords</h3>
+            <p>The owner account is created from a secure setup token. There is no admin/admin backdoor.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🔒</span>
+            <h3>Server-side enforcement</h3>
+            <p>Sessions and staff permissions are enforced on the server, not hidden in the UI layer.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🧹</span>
+            <h3>Clean repository surface</h3>
+            <p>No secrets, no merchant database, no <code>node_modules</code> and no private hosting identifiers committed.</p>
+          </article>
+          <article class="card" data-reveal>
+            <span class="ico" aria-hidden="true">🔗</span>
+            <h3>Reproducible build assets</h3>
+            <p>Large OCR assets are regenerated during build from locked packages rather than vendored blindly.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOCS ============ -->
+    <section class="section section-soft" id="docs">
+      <div class="wrap">
+        <span class="eyebrow">Documentation</span>
+        <h2>A docs-first project</h2>
+        <div class="ftable" style="margin-top:24px">
+          <table class="ftable">
+            <thead><tr><th>Document</th><th>Covers</th></tr></thead>
+            <tbody>
+              <tr><td><code>docs/decisions/</code></td><td>ADRs 0001–0003: architecture, loopback-only serving, honest transaction data.</td></tr>
+              <tr><td><code>docs/SERVER_VALIDATION.md</code></td><td>Executed validation record.</td></tr>
+              <tr><td><code>docs/COMMERCIAL_LAUNCH_CHECKLIST.md</code></td><td>Release readiness and open gates.</td></tr>
+              <tr><td><code>docs/THIRD_PARTY_NOTICES.md</code></td><td>Locked dependency and vendored-asset notices.</td></tr>
+              <tr><td><code>docs/screenshots/</code></td><td>Visual proof of running flows.</td></tr>
+              <tr><td><code>tests/</code></td><td>Registry API, engine, ledger, cash drawer and launcher tests.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-ghost" href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/START_HERE.md" target="_blank" rel="noopener">Start here</a>
+          <a class="btn btn-ghost" href="https://github.com/honeyamn10-source/pos-retail/blob/main/docs/decisions/0003-honest-transaction-data.md" target="_blank" rel="noopener">Honest transaction data (ADR 0003)</a>
+          <a class="btn btn-ghost" href="https://github.com/honeyamn10-source/pos-retail/tree/main/tests" target="_blank" rel="noopener">Test suite</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <h4>pos-retail</h4>
+          <p class="bio">A self-hosted retail register — cash sales, held carts, inventory and back-office reporting on a server you control. MIT licensed, controlled pilot.</p>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail" target="_blank" rel="noopener">GitHub repository</a></li>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/issues" target="_blank" rel="noopener">Issue tracker</a></li>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/SECURITY.md" target="_blank" rel="noopener">Security policy</a></li>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/LICENSE" target="_blank" rel="noopener">License (MIT)</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="https://github.com/honeyamn10-source" target="_blank" rel="noopener">GitHub profile</a></li>
+            <li><a href="https://honeyamn10-source.github.io/" target="_blank" rel="noopener">Project directory</a></li>
+            <li><a href="https://honeyamn10-source.github.io/Quant_Lab/" target="_blank" rel="noopener">Quant Lab</a></li>
+            <li><a href="https://honeyamn10-source.github.io/pos/" target="_blank" rel="noopener">POS family → pos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Releases</h4>
+          <ul>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/blob/main/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a></li>
+            <li><a href="https://github.com/honeyamn10-source/pos-retail/releases" target="_blank" rel="noopener">Releases</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">
+        <span>Built by <a href="https://github.com/honeyamn10-source" target="_blank" rel="noopener">Bittu Sharma</a> · honeyamn10-source</span>
+        <span>© 2026 Bittu Sharma · MIT License</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+</body>
+</html>
