@@ -32,7 +32,7 @@ livekit-agents==1.8.1
 livekit-api==1.2.1
 livekit-blingfire==1.1.0
 livekit-local-inference==0.2.7
-livekit-protocol==1.1.26
+livekit-protocol==1.1.27
 markdown-it-py==4.2.0
 mdurl==0.1.2
 multidict==6.8.0
