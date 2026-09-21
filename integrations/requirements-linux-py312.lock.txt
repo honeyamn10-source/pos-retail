@@ -28,7 +28,7 @@ importlib_resources==7.1.0
 jiter==0.17.0
 json_repair==0.60.1
 livekit==1.1.18
-livekit-agents==1.8.1
+livekit-agents==1.8.2
 livekit-api==1.2.1
 livekit-blingfire==1.1.0
 livekit-local-inference==0.2.7
