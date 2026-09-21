@@ -1,4 +1,4 @@
 # Direct runtime versions. Linux/Python 3.12 SDK imports were verified.
 # Reproduce with requirements-linux-py312.lock.txt; live calls/hardware remain unverified.
-livekit-agents==1.8.1
+livekit-agents==1.8.2
 python-escpos==3.1
