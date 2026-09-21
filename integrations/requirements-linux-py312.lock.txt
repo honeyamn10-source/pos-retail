@@ -27,7 +27,7 @@ idna==3.19
 importlib_resources==7.1.0
 jiter==0.17.0
 json_repair==0.60.1
-livekit==1.1.18
+livekit==1.1.19
 livekit-agents==1.8.1
 livekit-api==1.2.1
 livekit-blingfire==1.1.0
