@@ -9,6 +9,7 @@ import type { CartItem, HeldCart } from '@/lib/pos-operations';
 import PrintQueue from './print-queue';
 import CashDrawer from './cash-drawer';
 import ChannelInbox from './channel-inbox';
+import { useUrlQuery } from '@/hooks/use-url-query';
 import { usePosStore } from '@/lib/use-pos-store';
 
 type Screen = 'sell' | 'tables' | 'checks' | 'kitchen' | 'calls' | 'holds' | 'catalog' | 'printers' | 'cash' | 'online';
@@ -18,7 +19,9 @@ function time(value: string, zone: string) { return new Date(value).toLocaleTime
 export default function Pos({ mode, tour = false }: { mode: Mode; tour?: boolean }) {
   const restaurant = mode === 'restaurant';
   const { state, loaded, busy, failure, pending, signInRequired, load, run, recover } = usePosStore(tour);
-  const [screen, setScreen] = useState<Screen>('sell');
+  const initialScreen = useUrlQuery('screen');
+  const [screenOverride, setScreen] = useState<Screen | null>(null);
+  const screen: Screen = screenOverride ?? (initialScreen && ['sell','tables','checks','kitchen','calls','holds','catalog','printers','cash','online'].includes(initialScreen) ? initialScreen as Screen : 'sell');
   const [search, setSearch] = useState(''), [category, setCategory] = useState('All');
   const deferredSearch = useDeferredValue(search);
   const [cart, setCart] = useState<CartItem[]>([]), [reference, setReference] = useState(''), [notes, setNotes] = useState('');
@@ -38,7 +41,6 @@ export default function Pos({ mode, tour = false }: { mode: Mode; tour?: boolean
   const batches = tickets.flatMap(o => (o.batches ?? [{id:o.id,lines:o.lines,status:o.kitchen as 'new'|'preparing'|'ready'|'served',createdAt:o.createdAt}]).filter(b=>b.status!=='served').map(b=>({ ...b, order:o })));
   const holds = (state.holds ?? []).filter(h => h.mode === mode);
   const blocked = !loaded || busy || !!pending;
-  useEffect(()=>{const initial = new URLSearchParams(window.location.search).get('screen');if(initial && ['sell','tables','checks','kitchen','calls','holds','catalog','printers','cash','online'].includes(initial))setScreen(initial as Screen);},[]);
   useEffect(() => { const tick = () => setClock(time(new Date().toISOString(), state.settings.timezone)); tick(); const id = setInterval(tick, 15000); return () => clearInterval(id); }, [state.settings.timezone]);
   useEffect(() => { const guard = (e: BeforeUnloadEvent) => { if (cart.length || pending) { e.preventDefault(); e.returnValue = ''; } }; window.addEventListener('beforeunload', guard); return () => window.removeEventListener('beforeunload', guard); }, [cart.length, pending]);
   const set = (field: string, value: string) => setForm(old => ({ ...old, [field]: value }));

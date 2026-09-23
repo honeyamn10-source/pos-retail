@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {applyOperation,emptyStore,type Store} from '../lib/engine.ts';
 import {quoteOrder,signQuote,verifyQuote,validateQuoteAtCommit} from '../lib/voice.ts';
 const at='2026-09-10T16:00:00Z',now=Date.parse(at),secret='0123456789abcdef0123456789abcdef';
-function setup(){let s=applyOperation(emptyStore(),{id:'seed',type:'seed'},at).state;return applyOperation(s,{id:'shift',type:'openShift',float:0},at).state;}
+function setup(){const s=applyOperation(emptyStore(),{id:'seed',type:'seed'},at).state;return applyOperation(s,{id:'shift',type:'openShift',float:0},at).state;}
 const draft={callId:'call-123',customer:'Pickup customer',items:[{productId:'sample-7',qty:1}],notes:''};
 test('voice quote is signed, owner bound, time bound, and rejects tampering',async()=>{const q=quoteOrder(setup(),'owner',draft,now),token=await signQuote(q,secret);assert.equal((await verifyQuote(token,secret,'owner',now)).total,1639);await assert.rejects(verifyQuote(token,secret,'other',now),/expired/);await assert.rejects(verifyQuote(token,secret,'owner',now+121000),/expired/);await assert.rejects(verifyQuote('X'+token.slice(1),secret,'owner',now));});
 test('voice confirmation preserves one order and kitchen job under retries',()=>{const s=setup(),q=quoteOrder(s,'owner',draft,now);const accepted=validateQuoteAtCommit(s,q,now).state;assert.equal(accepted.orders[0].status,'unpaid');assert.equal(accepted.orders[0].kitchen,'new');assert.equal(accepted.prints.length,1);assert.equal(validateQuoteAtCommit(accepted,q,now).duplicate,true);assert.throws(()=>quoteOrder(accepted,'owner',draft,now),/already exists/);});

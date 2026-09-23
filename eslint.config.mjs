@@ -5,6 +5,14 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    files: ["app/pos.tsx", "app/online-order.tsx"],
+    rules: {
+      // These components also ship in the standalone Vite/Node server without
+      // a Next router. Full document navigation is intentional in both builds.
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Fragment } from 'react';
 import report from '../../public/Jawa_POS_Deep_Research_and_Release_Review.md?raw';
 // A small renderer for this authored report only; no HTML or user content is evaluated.
@@ -22,5 +23,5 @@ function reportBlocks() {
   });
 }
 export default function Research() {
-  return <main className="pos-research"><nav><a href="/">Choose app</a><a href="/restaurant">Restaurant</a><a href="/retail">Retail</a></nav><p><a href="/Jawa_POS_Deep_Research_and_Release_Review.md" download>Download research report</a></p>{reportBlocks()}</main>;
+  return <main className="pos-research"><nav><Link href="/">Choose app</Link><a href="/restaurant">Restaurant</a><a href="/retail">Retail</a></nav><p><a href="/Jawa_POS_Deep_Research_and_Release_Review.md" download>Download research report</a></p>{reportBlocks()}</main>;
 }
