@@ -2,6 +2,20 @@
 
 # Jawa Retail
 
+<!-- repo-badges:start -->
+<div align="center">
+
+[![Stars](https://img.shields.io/github/stars/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Stars)](https://github.com/honeyamn10-source/pos-retail/stargazers)
+[![Forks](https://img.shields.io/github/forks/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Forks)](https://github.com/honeyamn10-source/pos-retail/forks)
+[![Issues](https://img.shields.io/github/issues/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Issues)](https://github.com/honeyamn10-source/pos-retail/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Last%20Commit)](https://github.com/honeyamn10-source/pos-retail/commits/main)
+
+[Repository](https://github.com/honeyamn10-source/pos-retail) · [Issues](https://github.com/honeyamn10-source/pos-retail/issues) · [Pull Requests](https://github.com/honeyamn10-source/pos-retail/pulls) · [Actions](https://github.com/honeyamn10-source/pos-retail/actions)
+
+</div>
+<!-- repo-badges:end -->
+
+
 A self-hosted retail cash register for SKU lookup, held carts, stock receiving, returns and store reports.
 
 [Project website](https://honeyamn10-source.github.io/pos-retail/) · [Source](https://github.com/honeyamn10-source/pos-retail) · [Build results](https://github.com/honeyamn10-source/pos-retail/actions) · [Issues](https://github.com/honeyamn10-source/pos-retail/issues)
