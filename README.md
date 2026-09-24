@@ -32,6 +32,22 @@ A self-hosted retail cash register for SKU lookup, held carts, stock receiving, 
 
 [Project website](https://honeyamn10-source.github.io/pos-retail/) · [Source](https://github.com/honeyamn10-source/pos-retail) · [Build results](https://github.com/honeyamn10-source/pos-retail/actions) · [Issues](https://github.com/honeyamn10-source/pos-retail/issues)
 
+<!-- architecture-showcase:start -->
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Retail UI] --> B[Next.js application]
+    B --> C[Standalone Node server / managed Worker]
+    C --> D[(Store database)]
+    C --> E[SKU, cart, stock and reporting workflows]
+    C --> F[Integration adapters]
+    F --> G[External services]
+```
+
+The repository supports separate deployment paths; payment and hardware integrations require their own live configuration and validation.
+<!-- architecture-showcase:end -->
+
 ## What it does
 
 - **Build a basket.** Scan exact SKUs or choose products and review quantities and configured tax.
