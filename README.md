@@ -9,6 +9,7 @@
 [![Forks](https://img.shields.io/github/forks/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Forks)](https://github.com/honeyamn10-source/pos-retail/forks)
 [![Issues](https://img.shields.io/github/issues/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Issues)](https://github.com/honeyamn10-source/pos-retail/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/honeyamn10-source/pos-retail?style=flat-square&logo=github&label=Last%20Commit)](https://github.com/honeyamn10-source/pos-retail/commits/main)
+[![License](https://img.shields.io/github/license/honeyamn10-source/pos-retail?style=flat-square&label=License)](https://github.com/honeyamn10-source/pos-retail/blob/main/LICENSE)
 
 [Repository](https://github.com/honeyamn10-source/pos-retail) · [Issues](https://github.com/honeyamn10-source/pos-retail/issues) · [Pull Requests](https://github.com/honeyamn10-source/pos-retail/pulls) · [Actions](https://github.com/honeyamn10-source/pos-retail/actions)
 
